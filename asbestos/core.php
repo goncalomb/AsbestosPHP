@@ -8,6 +8,7 @@ define('ASBESTOS_VERSION', '0.0.0');
 define('ASBESTOS_DIR', __DIR__);
 define('ASBESTOS_ROOT_DIR', dirname(__DIR__));
 define('ASBESTOS_CLASSES_DIR', realpath(__DIR__ . DIRECTORY_SEPARATOR . 'classes'));
+define('ASBESTOS_THEME_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'theme');
 
 spl_autoload_register(function($name) {
 	if (strncmp($name, 'Asbestos\\', 9) == 0) {
