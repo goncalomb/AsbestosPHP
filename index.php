@@ -2,9 +2,11 @@
 
 require './asbestos/core.php';
 use \Asbestos\Asbestos;
+use \Asbestos\Page;
 
-header('Content-Type: text/plain; charset=utf-8');
-echo "Welcome to AsbestosPHP!\n";
-echo Asbestos::executionTime(), "\n";
+$page = Page::start();
+$page->title('AsbestosPHP');
+
+echo "<p>Welcome to AsbestosPHP!</p>";
 
 ?>
