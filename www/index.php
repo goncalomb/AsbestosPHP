@@ -7,9 +7,8 @@ use \Asbestos\Page;
 $page = Asbestos::startThemedPage();
 $page->title('AsbestosPHP');
 
-Page::append('header', '<h1>AsbestosPHP</h1>');
-Page::append('footer', '<p><small>by <a href="https://goncalomb.com/">goncalomb</a></small></p>');
-
-echo "<p>Welcome to AsbestosPHP!</p>";
-
 ?>
+
+<p>Welcome to AsbestosPHP!</p>
+<p>A small framework for creating web applications in PHP.</p>
+<p><a href="https://github.com/goncalomb/AsbestosPHP">AsbestosPHP on GitHub</a></p>
