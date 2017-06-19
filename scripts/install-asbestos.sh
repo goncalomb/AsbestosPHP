@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 ASBESTOS_VERSION="master" # replace with a specific commit sha1
 INSTALL_PATH="www" # relative install path
