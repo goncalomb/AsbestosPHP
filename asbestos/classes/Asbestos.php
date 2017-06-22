@@ -24,6 +24,9 @@ final class Asbestos {
 
 	private static function loadTheme($title=null) {
 		$theme_file = ASBESTOS_THEME_DIR . DIRECTORY_SEPARATOR . 'theme.php';
+		if (!is_file($theme_file)) {
+			$theme_file = ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'theme.php';
+		}
 		if (is_file($theme_file)) {
 			$page = Page::start();
 			require $theme_file;

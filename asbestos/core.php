@@ -19,7 +19,10 @@ define('ASBESTOS_ROOT_DIR', $path);
 unset($path, $path_last);
 
 define('ASBESTOS_CLASSES_DIR', ASBESTOS_DIR . DIRECTORY_SEPARATOR . 'classes');
+define('ASBESTOS_CONTENT_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'content');
 define('ASBESTOS_THEME_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'theme');
+
+define('ASBESTOS_INIT_FILE', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'init.php');
 
 spl_autoload_register(function($name) {
 	if (strncmp($name, 'Asbestos\\', 9) == 0) {
@@ -30,5 +33,9 @@ spl_autoload_register(function($name) {
 		}
 	}
 });
+
+if (is_file(ASBESTOS_INIT_FILE)) {
+	require ASBESTOS_INIT_FILE;
+}
 
 ?>
