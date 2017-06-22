@@ -12,35 +12,55 @@ final class Asbestos {
 		503 => 'Service Temporarily Unavailable'
 	);
 
-	private static $_errorFn = null;
+	private static $_configs = array();
 
-	public static function startThemedPage() {
+	public static function setConfig($name, $value) {
+		self::$_configs[$name] = $value;
+	}
+
+	public static function getConfig($name, $default=null) {
+		return (isset(self::$_configs[$name]) ? self::$_configs[$name] : $default);
+	}
+
+	private static function loadTheme($title=null) {
+		$theme_file = ASBESTOS_THEME_DIR . DIRECTORY_SEPARATOR . 'theme.php';
+		if (is_file($theme_file)) {
+			$page = Page::start();
+			require $theme_file;
+			if ($title) {
+				$title_prefix = self::getConfig('title_prefix', '');
+				$title_suffix = self::getConfig('title_suffix', '');
+				$title = "{$title_prefix}{$title}{$title_suffix}";
+			} else {
+				$title = self::getConfig('title_default');
+			}
+			if ($title) {
+				$page->title($title);
+			}
+			return $page;
+		}
+		return null;
+	}
+
+	public static function startThemedPage($title=null) {
 		if (isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] != 200) {
 			self::triggerHttpError($_SERVER['REDIRECT_STATUS']);
 		}
-		$page = Page::start();
-		$theme_file = ASBESTOS_THEME_DIR . DIRECTORY_SEPARATOR . 'theme.php';
-		if (is_file($theme_file)) {
-			require $theme_file;
+		$page = self::loadTheme($title);
+		if (!$page) {
+			$page = Page::start();
 		}
 		return $page;
-	}
-
-	public static function registerErrorFn($fn) {
-		self::$_errorFn = $fn;
 	}
 
 	public static function triggerHttpError($error_code, $error_name=null) {
 		if (!$error_name) {
 			$error_name = (isset(self::$_htmlErrorNames[$error_code]) ? self::$_htmlErrorNames[$error_code] : 'Unknown Error');
 		}
-		$theme_file = ASBESTOS_THEME_DIR . DIRECTORY_SEPARATOR . 'theme.php';
-		if (is_file($theme_file)) {
-			header('Content-Type: text/html; charset=utf-8', true, $error_code);
-			Page::start();
-			require $theme_file;
-			if (self::$_errorFn) {
-				call_user_func(self::$_errorFn, $error_code, $error_name);
+		header('Content-Type: text/html; charset=utf-8', true, $error_code);
+		if (self::loadTheme("{$error_code} {$error_name}")) {
+			if (isset(self::$_configs['error_callback']) && is_callable(self::$_configs['error_callback'])) {
+				call_user_func(self::$_configs['error_callback'], $error_code, $error_name);
 			} else {
 				echo '<p style="color: crimson;">', $error_code, ' ', $error_name, '</p>';
 			}
