@@ -30,8 +30,10 @@ final class Asbestos {
 		self::$_errorFn = $fn;
 	}
 
-	public static function triggerHttpError($error_code) {
-		$error_name = (isset(self::$_htmlErrorNames[$error_code]) ? self::$_htmlErrorNames[$error_code] : 'Unknown Error');
+	public static function triggerHttpError($error_code, $error_name=null) {
+		if (!$error_name) {
+			$error_name = (isset(self::$_htmlErrorNames[$error_code]) ? self::$_htmlErrorNames[$error_code] : 'Unknown Error');
+		}
 		$theme_file = ASBESTOS_THEME_DIR . DIRECTORY_SEPARATOR . 'theme.php';
 		if (is_file($theme_file)) {
 			header('Content-Type: text/html; charset=utf-8', true, $error_code);
