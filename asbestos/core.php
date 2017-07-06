@@ -20,17 +20,18 @@ unset($path, $path_last);
 
 define('ASBESTOS_CLASSES_DIR', ASBESTOS_DIR . DIRECTORY_SEPARATOR . 'classes');
 define('ASBESTOS_CONTENT_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'content');
+define('ASBESTOS_CLASSES_ALT_DIR', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'classes');
 define('ASBESTOS_THEME_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'theme');
 
 define('ASBESTOS_INIT_FILE', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'init.php');
 
+require ASBESTOS_DIR . DIRECTORY_SEPARATOR . 'functions.php';
+
 spl_autoload_register(function($name) {
 	if (strncmp($name, 'Asbestos\\', 9) == 0) {
-		$name = substr($name, 9);
-		$file = ASBESTOS_CLASSES_DIR . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $name) . '.php';
-		if (is_file($file)) {
-			require $file;
-		}
+		Asbestos\load_class(substr($name, 9));
+	} else {
+		Asbestos\load_class($name, ASBESTOS_CLASSES_ALT_DIR);
 	}
 });
 
