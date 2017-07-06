@@ -13,6 +13,7 @@ final class Asbestos {
 	);
 
 	private static $_configs = array();
+	private static $_routing = false;
 
 	public static function setConfig($name, $value) {
 		self::$_configs[$name] = $value;
@@ -45,8 +46,21 @@ final class Asbestos {
 		return null;
 	}
 
+	public static function startRouting($index_fallback=false) {
+		self::$_routing = true;
+		if (isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] != 200 && $_SERVER['REDIRECT_STATUS'] != 404) {
+			self::triggerHttpError($_SERVER['REDIRECT_STATUS']);
+		}
+		safe_require(ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'routes.php');
+		if (Routing\Router::run(ASBESTOS_REQUEST_METHOD, ASBESTOS_REQUEST_PATH)) {
+			exit();
+		} else if (!$index_fallback || ASBESTOS_REQUEST_PATH != '/') {
+			self::triggerHttpError(404);
+		}
+	}
+
 	public static function startThemedPage($title=null) {
-		if (isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] != 200) {
+		if (!self::$_routing && isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] != 200) {
 			self::triggerHttpError($_SERVER['REDIRECT_STATUS']);
 		}
 		$page = self::loadTheme($title);

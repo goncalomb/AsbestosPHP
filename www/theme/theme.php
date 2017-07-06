@@ -10,7 +10,7 @@ Page::stylesheetFile('https://cdn.jsdelivr.net/normalize/7.0.0/normalize.css');
 Page::stylesheetFile('https://fonts.googleapis.com/css?family=Bitter:400,700');
 
 Page::head()->append('<style>
-body { font-family: sans; text-align: center; }
+body { font-family: sans; text-align: center; max-width: 600px; margin: 0 auto; }
 h1 { font-family: \'Bitter\', serif; }
 </style>');
 
