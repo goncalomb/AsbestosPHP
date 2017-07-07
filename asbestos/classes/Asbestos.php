@@ -65,6 +65,7 @@ final class Asbestos {
 		if (!self::$_routing && isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] != 200) {
 			self::triggerHttpError($_SERVER['REDIRECT_STATUS']);
 		}
+		header('Content-Type: text/html; charset=utf-8', true, 200);
 		$page = self::loadTheme($title);
 		if (!$page) {
 			$page = Page::start();
