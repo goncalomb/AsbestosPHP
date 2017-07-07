@@ -23,6 +23,7 @@ define('ASBESTOS_CONTENT_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'conten
 define('ASBESTOS_CLASSES_ALT_DIR', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'classes');
 define('ASBESTOS_THEME_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'theme');
 
+define('ASBESTOS_CONFIG_FILE', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'config.php');
 define('ASBESTOS_INIT_FILE', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'init.php');
 
 define('ASBESTOS_REQUEST_METHOD', 'GET');
@@ -39,6 +40,15 @@ spl_autoload_register(function($name) {
 		Asbestos\load_class($name, ASBESTOS_CLASSES_ALT_DIR);
 	}
 });
+
+if (is_file(ASBESTOS_CONFIG_FILE)) {
+	Asbestos\Config::load(ASBESTOS_CONFIG_FILE);
+}
+
+if ($timezone = Asbestos\Config::get('timezone', 'UTC')) {
+	date_default_timezone_set($timezone);
+}
+unset($timezone);
 
 if (is_file(ASBESTOS_INIT_FILE)) {
 	require ASBESTOS_INIT_FILE;

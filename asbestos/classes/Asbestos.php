@@ -12,16 +12,7 @@ final class Asbestos {
 		503 => 'Service Temporarily Unavailable'
 	);
 
-	private static $_configs = array();
 	private static $_routing = false;
-
-	public static function setConfig($name, $value) {
-		self::$_configs[$name] = $value;
-	}
-
-	public static function getConfig($name, $default=null) {
-		return (isset(self::$_configs[$name]) ? self::$_configs[$name] : $default);
-	}
 
 	private static function loadTheme($title=null) {
 		$theme_file = ASBESTOS_THEME_DIR . DIRECTORY_SEPARATOR . 'theme.php';
@@ -32,11 +23,11 @@ final class Asbestos {
 			$page = Page::start();
 			require $theme_file;
 			if ($title) {
-				$title_prefix = self::getConfig('title_prefix', '');
-				$title_suffix = self::getConfig('title_suffix', '');
+				$title_prefix = Config::get('site.title.prefix', '');
+				$title_suffix = Config::get('site.title.suffix', '');
 				$title = "{$title_prefix}{$title}{$title_suffix}";
 			} else {
-				$title = self::getConfig('title_default');
+				$title = Config::get('site.title.default', '');
 			}
 			if ($title) {
 				$page->title($title);
@@ -76,8 +67,9 @@ final class Asbestos {
 		}
 		header('Content-Type: text/html; charset=utf-8', true, $error_code);
 		if (self::loadTheme("{$error_code} {$error_name}")) {
-			if (isset(self::$_configs['error_callback']) && is_callable(self::$_configs['error_callback'])) {
-				call_user_func(self::$_configs['error_callback'], $error_code, $error_name);
+			$error_callback = Config::get('site.onerror');
+			if (is_callable($error_callback)) {
+				call_user_func($error_callback, $error_code, $error_name);
 			} else {
 				echo '<p style="color: crimson;">', $error_code, ' ', $error_name, '</p>';
 			}
