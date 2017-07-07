@@ -1,6 +1,7 @@
 <?php
 
 use \Asbestos\Asbestos;
+use \Asbestos\Config;
 
 class ExamplePageController {
 
@@ -18,6 +19,18 @@ class ExamplePageController {
 		}
 		echo "\n";
 		var_dump($params);
+		echo '</pre>';
+	}
+
+	public function debug() {
+		Asbestos::startThemedPage('debug');
+		echo '<pre style="text-align: left;">';
+		echo date('c'), "\n\n";
+		echo '<strong>Config::get(null)</strong> = ';
+		var_dump(Config::get(null));
+		echo "\n";
+		echo '<strong>array_keys($GLOBALS)</strong> = ';
+		var_dump(array_keys($GLOBALS));
 		echo '</pre>';
 	}
 
