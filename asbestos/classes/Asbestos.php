@@ -42,6 +42,17 @@ final class Asbestos {
 		if (isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] != 200 && $_SERVER['REDIRECT_STATUS'] != 404) {
 			self::triggerHttpError($_SERVER['REDIRECT_STATUS']);
 		}
+		if (Config::get('routing.robots-txt.enable', false)) {
+			Routing\Router::match('GET', '/robots\.txt', function() {
+				header('Content-Type: text/plain; charset=utf-8', true, 200);
+				echo "User-agent: *\n";
+				if (Config::get('routing.robots-txt.disallow', false)) {
+					echo "Disallow: /\n";
+				} else {
+					echo "Disallow:\n";
+				}
+			});
+		}
 		safe_require(ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'routes.php');
 		if (Routing\Router::run(ASBESTOS_REQUEST_METHOD, ASBESTOS_REQUEST_PATH)) {
 			exit();

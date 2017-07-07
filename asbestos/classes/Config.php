@@ -6,6 +6,12 @@ class Config {
 
 	private static $_data = [
 		'timezone' => 'UTC',
+		'routing' => [
+			'robots-txt' => [
+				'enable' => false,
+				'disallow' => false
+			]
+		],
 		'site' => [
 			'title' => [
 				'default' => 'AsbestosPHP',
