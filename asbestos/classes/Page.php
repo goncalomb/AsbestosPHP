@@ -12,12 +12,22 @@ final class Page {
 		if (self::$_page) {
 			return null;
 		}
-		self::$_page = new HtmlPage();
+		self::$_page = new Html\Document();
 		self::$_zones['head'] = self::$_page->head();
 		self::$_zones['body'] = self::$_page->body();
 		ob_start();
 		register_shutdown_function(array(__CLASS__, 'end'));
 		return self::$_page;
+	}
+
+	public static function createZone($tag, $name) {
+		if (self::$_page && !isset(self::$_zones[$name])) {
+			$element = new Html\Element($tag);
+			self::$_zones[$name] = $element;
+			self::append(self::$_outputZone, $element);
+			return $element;
+		}
+		return null;
 	}
 
 	public static function zone($name, $element=null) {

@@ -1,7 +1,6 @@
 <?php
 
 use \Asbestos\Page;
-use \Asbestos\HtmlElement;
 
 Page::metaTag('description', 'A small framework for creating web applications in PHP.');
 Page::metaTag('author', 'goncalomb');
@@ -14,15 +13,12 @@ body { font-family: sans; text-align: center; max-width: 600px; margin: 0 auto; 
 h1 { font-family: \'Bitter\', serif; }
 </style>');
 
-$main = new HtmlElement('main');
-Page::zone('main', $main);
-
 ?>
 
 <header>
 	<h1>AsbestosPHP</h1>
 </header>
-<?php Page::append('body', $main); ?>
+<?php Page::createZone('main', 'main'); ?>
 
 <footer>
 	<p><small>by <a href="https://goncalomb.com/">goncalomb</a></small></p>
