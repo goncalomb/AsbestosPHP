@@ -30,8 +30,13 @@ final class Asbestos {
 				$title = Config::get('site.title.default', '');
 			}
 			if ($title) {
+				$page->ogTags([ 'title' => $title ]);
 				$page->title($title);
 			}
+			$page->ogTags([
+				'type' => 'website',
+				'url' => ASBESTOS_REQUEST_URL
+			]);
 			return $page;
 		}
 		return null;

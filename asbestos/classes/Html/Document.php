@@ -28,6 +28,10 @@ class Document {
 		$this->_headElement->metaTag($name, $content);
 	}
 
+	public function ogTags($data, $merge=true, $prefix='og') {
+		$this->_headElement->ogTags($data, $merge, $prefix);
+	}
+
 	public function stylesheetFile($href) {
 		$this->_headElement->stylesheetFile($href);
 	}

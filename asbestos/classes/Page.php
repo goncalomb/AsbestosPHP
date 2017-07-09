@@ -69,6 +69,11 @@ final class Page {
 			self::$_page->metaTag($name, $content);
 		}
 	}
+	public static function ogTags($data, $merge=true, $prefix='og') {
+		if (self::$_page) {
+			self::$_page->ogTags($data, $merge, $prefix);
+		}
+	}
 
 	public static function scriptFile($src, $end=false) {
 		if (self::$_page) {
