@@ -3,9 +3,11 @@
 return [
 	'timezone' => 'Europe/Lisbon',
 	'site' => [
-		'title' => [
-			'default' => 'AsbestosPHP Test App',
-			'suffix' => ' - AsbestosPHP Test App'
+		'title' => 'AsbestosPHP Test App',
+		'title-format' => '{} - AsbestosPHP Test App',
+		'metadata' => [
+			'description' => 'A small framework for creating web applications in PHP.',
+			'author' => 'goncalomb'
 		]
 	]
 ];

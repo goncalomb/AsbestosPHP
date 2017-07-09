@@ -69,6 +69,7 @@ final class Page {
 			self::$_page->metaTag($name, $content);
 		}
 	}
+
 	public static function ogTags($data, $merge=true, $prefix='og') {
 		if (self::$_page) {
 			self::$_page->ogTags($data, $merge, $prefix);
@@ -84,6 +85,49 @@ final class Page {
 	public static function title($title) {
 		if (self::$_page) {
 			self::$_page->title($title);
+		}
+	}
+
+	public static function setMetadata($title=null, $data=[], $merge=true) {
+		if (self::$_page) {
+			$simple_title = $title;
+			if ($title) {
+				$title = str_replace('{}', $title, Config::get('site.title-format', '{}'));
+			} else {
+				$simple_title = $title = Config::get('site.title', '');
+			}
+			self::$_page->title($title);
+
+			if ($merge) {
+				if ($config_data = Config::get('site.metadata', [])) {
+					$data = array_merge($config_data, $data);
+				}
+			}
+
+			foreach (['description', 'keywords', 'author'] as $name) {
+				if (!empty($data[$name])) {
+					self::$_page->metaTag($name, $data[$name]);
+				}
+			}
+
+			if (isset($data['twitter']) && is_array($data['twitter'])) {
+				self::$_page->ogTags($data['twitter'], false, 'twitter');
+			} else {
+				self::$_page->ogTags([], false, 'twitter');
+			}
+
+			if (isset($data['og']) && is_array($data['og'])) {
+				$og_tags = [
+					'title' => $simple_title,
+					'url' => ASBESTOS_REQUEST_URL
+				];
+				if (!empty($data['description'])) {
+					$og_tags['description'] = $data['description'];
+				}
+				self::$_page->ogTags(array_merge($og_tags, $data['og']), false);
+			} else {
+				self::$_page->ogTags([], false);
+			}
 		}
 	}
 

@@ -13,10 +13,26 @@ class Config {
 			]
 		],
 		'site' => [
-			'title' => [
-				'default' => 'AsbestosPHP',
-				'prefix' => '',
-				'suffix' => ' - AsbestosPHP'
+			'title' => 'AsbestosPHP',
+			'title-format' => '{} - AsbestosPHP',
+			'metadata' => [
+				'description' => null,
+				'keywords' => null,
+				'author' => null,
+				'twitter' => [
+					'card' => 'summary',
+					// 'site' => '',
+					// 'creator' => ''
+					// ... https://dev.twitter.com/cards/markup
+				],
+				'og' => [
+					// 'title' => '',       // set automatically
+					'type' => 'website',
+					// 'image' => '',       // NOT set automatically
+					// 'url' => '',         // set automatically
+					// 'description' => '', // set automatically
+					// ... http://ogp.me/
+				]
 			]
 		]
 	];

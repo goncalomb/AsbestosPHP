@@ -21,22 +21,8 @@ final class Asbestos {
 		}
 		if (is_file($theme_file)) {
 			$page = Page::start();
-			require $theme_file;
-			if ($title) {
-				$title_prefix = Config::get('site.title.prefix', '');
-				$title_suffix = Config::get('site.title.suffix', '');
-				$title = "{$title_prefix}{$title}{$title_suffix}";
-			} else {
-				$title = Config::get('site.title.default', '');
-			}
-			if ($title) {
-				$page->ogTags([ 'title' => $title ]);
-				$page->title($title);
-			}
-			$page->ogTags([
-				'type' => 'website',
-				'url' => ASBESTOS_REQUEST_URL
-			]);
+			Page::setMetadata($title);
+			safe_require($theme_file);
 			return $page;
 		}
 		return null;

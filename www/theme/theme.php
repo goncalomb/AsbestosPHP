@@ -2,9 +2,6 @@
 
 use \Asbestos\Page;
 
-Page::metaTag('description', 'A small framework for creating web applications in PHP.');
-Page::metaTag('author', 'goncalomb');
-
 Page::stylesheetFile('https://cdn.jsdelivr.net/normalize/7.0.0/normalize.css');
 Page::stylesheetFile('https://fonts.googleapis.com/css?family=Bitter:400,700');
 
