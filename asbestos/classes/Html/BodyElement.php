@@ -18,7 +18,7 @@ class BodyElement extends Element {
 		$this->outputOpeningTag();
 		$this->outputContent();
 		foreach ($this->_scripts as $src) {
-			echo '<script type="text/javascript" src="', $src, '"></script>';
+			echo '<script type="text/javascript" src="', htmlspecialchars($src), "\"></script>\n";
 		}
 		$this->outputClosingTag();
 	}

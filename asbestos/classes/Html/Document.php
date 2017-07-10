@@ -51,7 +51,6 @@ class Document {
 	public function output() {
 		echo '<!DOCTYPE html>', "\n";
 		$this->_htmlElement->output();
-		echo "\n";
 	}
 
 }

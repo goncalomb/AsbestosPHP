@@ -40,23 +40,23 @@ class HeadElement extends Element {
 
 	public function output() {
 		$this->outputOpeningTag();
-		echo '<meta charset="utf-8">';
+		echo '<meta charset="utf-8">', "\n";
 		foreach ($this->_metatags as $name => $content) {
-			echo '<meta name="', $name, '" content="', $content, '">';
+			echo '<meta name="', htmlspecialchars($name), '" content="', htmlspecialchars($content), "\">\n";
 		}
 		foreach ($this->_ogtags as $prefix => $data) {
 			foreach ($data as $property => $content) {
-				echo '<meta property="', $prefix, ':', $property, '" content="', $content, '">';
+				echo '<meta property="', htmlspecialchars($prefix . ':' . $property), '" content="', htmlspecialchars($content), "\">\n";
 			}
 		}
 		foreach ($this->_styles as $href) {
-			echo '<link rel="stylesheet" type="text/css" href="', $href, '">';
+			echo '<link rel="stylesheet" type="text/css" href="', htmlspecialchars($href), "\">\n";
 		}
 		foreach ($this->_scripts as $src) {
-			echo '<script type="text/javascript" src="', $src, '"></script>';
+			echo '<script type="text/javascript" src="', htmlspecialchars($src), "\"></script>\n";
 		}
 		if ($this->_title) {
-			echo '<title>', $this->_title, '</title>';
+			echo '<title>', htmlspecialchars($this->_title), "</title>\n";
 		}
 		$this->outputContent();
 		$this->outputClosingTag();

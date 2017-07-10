@@ -39,11 +39,14 @@ class Element {
 	}
 
 	protected function outputOpeningTag() {
-		echo '<', $this->_tag;
+		echo '<', htmlspecialchars($this->_tag);
 		foreach ($this->_attributes as $name => $value) {
-			echo ' ', $name, '="', $value, '"';
+			echo ' ', htmlspecialchars($name), '="', htmlspecialchars($value), '"';
 		}
 		echo '>';
+		if ($this->_tag == 'html' || $this->_tag == 'head' || $this->_tag == 'body') {
+			echo "\n";
+		}
 	}
 
 	protected function outputContent() {
@@ -57,7 +60,10 @@ class Element {
 	}
 
 	protected function outputClosingTag() {
-		echo '</', $this->_tag, '>';
+		echo '</', htmlspecialchars($this->_tag), '>';
+		if ($this->_tag == 'html' || $this->_tag == 'head' || $this->_tag == 'body') {
+			echo "\n";
+		}
 	}
 
 	public function output() {
