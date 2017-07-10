@@ -91,7 +91,7 @@ class Config {
 			}
 		}
 		if ($default === null || is_array($data) == is_array($default)) {
-			// is default is set then the the data
+			// if default is set then the data
 			// must be of the same type (array or not array)
 			return $data;
 		} else  {

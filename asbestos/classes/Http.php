@@ -19,6 +19,8 @@ final class Http {
 		return self::$_context;
 	}
 
+	// TODO: add more methods, get() post() etc.
+
 	public static function requestSimple($url) {
 		if (function_exists('curl_init')) {
 			$ch = curl_init();

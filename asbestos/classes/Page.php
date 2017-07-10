@@ -90,6 +90,7 @@ final class Page {
 
 	public static function setMetadata($title=null, $data=[], $merge=true) {
 		if (self::$_page) {
+			// format the title
 			$simple_title = $title;
 			if ($title) {
 				$title = str_replace('{}', $title, Config::get('site.title-format', '{}'));
@@ -97,25 +98,25 @@ final class Page {
 				$simple_title = $title = Config::get('site.title', '');
 			}
 			self::$_page->title($title);
-
+			// merge data with the global configuration
 			if ($merge) {
 				if ($config_data = Config::get('site.metadata', [])) {
 					$data = array_merge($config_data, $data);
 				}
 			}
-
+			// set basic meta tags
 			foreach (['description', 'keywords', 'author'] as $name) {
 				if (!empty($data[$name])) {
 					self::$_page->metaTag($name, $data[$name]);
 				}
 			}
-
+			// set tags for Twitter Cards
 			if (isset($data['twitter']) && is_array($data['twitter'])) {
 				self::$_page->ogTags($data['twitter'], false, 'twitter');
 			} else {
 				self::$_page->ogTags([], false, 'twitter');
 			}
-
+			// set Open Graph tags
 			if (isset($data['og']) && is_array($data['og'])) {
 				$og_tags = [
 					'title' => $simple_title,

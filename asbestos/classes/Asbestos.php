@@ -65,6 +65,7 @@ final class Asbestos {
 	}
 
 	public static function triggerHttpError($error_code, $error_name=null) {
+		// TODO: move error handling code to new class
 		if (!$error_name) {
 			$error_name = (isset(self::$_htmlErrorNames[$error_code]) ? self::$_htmlErrorNames[$error_code] : 'Unknown Error');
 		}
