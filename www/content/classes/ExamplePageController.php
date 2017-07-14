@@ -2,6 +2,7 @@
 
 use \Asbestos\Asbestos;
 use \Asbestos\Config;
+use \Asbestos\Request;
 
 class ExamplePageController {
 
@@ -28,6 +29,9 @@ class ExamplePageController {
 		echo date('c'), "\n\n";
 		echo '<strong>Config::get(null)</strong> = ';
 		var_dump(Config::get(null));
+		echo "\n";
+		echo '<strong>Request::url(true)</strong> = ';
+		var_dump(Request::url(true));
 		echo "\n";
 		echo '<strong>array_keys($GLOBALS)</strong> = ';
 		var_dump(array_keys($GLOBALS));
