@@ -45,9 +45,9 @@ final class Asbestos {
 			});
 		}
 		safe_require(ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'routes.php');
-		if (Routing\Router::run(ASBESTOS_REQUEST_METHOD, ASBESTOS_REQUEST_PATH)) {
+		if (Routing\Router::run(Request::method(), Request::path())) {
 			exit();
-		} else if (!$index_fallback || ASBESTOS_REQUEST_PATH != '/') {
+		} else if (!$index_fallback || Request::path() != '/') {
 			self::triggerHttpError(404);
 		}
 	}

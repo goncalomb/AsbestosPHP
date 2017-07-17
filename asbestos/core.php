@@ -26,12 +26,6 @@ define('ASBESTOS_THEME_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'theme');
 define('ASBESTOS_CONFIG_FILE', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'config.php');
 define('ASBESTOS_INIT_FILE', ASBESTOS_CONTENT_DIR . DIRECTORY_SEPARATOR . 'init.php');
 
-define('ASBESTOS_REQUEST_METHOD', 'GET');
-define('ASBESTOS_REQUEST_URL', ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-$path = strstr($_SERVER['REQUEST_URI'], '?', true);
-define('ASBESTOS_REQUEST_PATH', ($path ? $path : $_SERVER['REQUEST_URI']));
-unset($path);
-
 require ASBESTOS_DIR . DIRECTORY_SEPARATOR . 'functions.php';
 
 spl_autoload_register(function($name) {

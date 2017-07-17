@@ -4,6 +4,7 @@ namespace Asbestos;
 
 final class Request {
 
+	private static $_method = null;
 	private static $_scheme = null;
 	private static $_host = null;
 	private static $_path = null;
@@ -12,6 +13,7 @@ final class Request {
 
 	public static function _initialize() {
 		if (self::$_scheme === null) {
+			self::$_method = $_SERVER['REQUEST_METHOD'];
 			self::$_scheme = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http');
 			self::$_host = $_SERVER['HTTP_HOST'];
 			self::$_path = strstr($_SERVER['REQUEST_URI'], '?', true);
@@ -24,6 +26,10 @@ final class Request {
 			}
 			self::$_url = self::$_scheme . '://' . self::$_host . $_SERVER['REQUEST_URI'];
 		}
+	}
+
+	public static function method() {
+		return self::$_method;
 	}
 
 	public static function scheme() {
@@ -45,6 +51,7 @@ final class Request {
 	public static function url($as_array=false) {
 		return ($as_array ? [
 			'url' => self::$_url,
+			'method' => self::$_method,
 			'scheme' => self::$_scheme,
 			'host' => self::$_host,
 			'path' => self::$_path,

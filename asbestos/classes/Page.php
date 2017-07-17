@@ -120,7 +120,7 @@ final class Page {
 			if (isset($data['og']) && is_array($data['og'])) {
 				$og_tags = [
 					'title' => $simple_title,
-					'url' => ASBESTOS_REQUEST_URL
+					'url' => Request::url()
 				];
 				if (!empty($data['description'])) {
 					$og_tags['description'] = $data['description'];
