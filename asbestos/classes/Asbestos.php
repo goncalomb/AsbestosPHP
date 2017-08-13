@@ -35,7 +35,7 @@ final class Asbestos {
 		}
 		if (Config::get('routing.robots-txt.enable', false)) {
 			Routing\Router::match('GET', '/robots\.txt', function() {
-				header('Content-Type: text/plain; charset=utf-8', true, 200);
+				Response::contentType('plain', 200);
 				echo "User-agent: *\n";
 				if (Config::get('routing.robots-txt.disallow', false)) {
 					echo "Disallow: /\n";
@@ -56,7 +56,7 @@ final class Asbestos {
 		if (!self::$_routing && isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] != 200) {
 			self::triggerHttpError($_SERVER['REDIRECT_STATUS']);
 		}
-		header('Content-Type: text/html; charset=utf-8', true, 200);
+		Response::contentType('html', 200);
 		$page = self::loadTheme($title);
 		if (!$page) {
 			$page = Page::start();
@@ -69,7 +69,7 @@ final class Asbestos {
 		if (!$error_name) {
 			$error_name = (isset(self::$_htmlErrorNames[$error_code]) ? self::$_htmlErrorNames[$error_code] : 'Unknown Error');
 		}
-		header('Content-Type: text/html; charset=utf-8', true, $error_code);
+		Response::contentType('html', $error_code);
 		if (self::loadTheme("{$error_code} {$error_name}")) {
 			$error_callback = Config::get('site.onerror');
 			if (is_callable($error_callback)) {
@@ -78,7 +78,7 @@ final class Asbestos {
 				echo '<p style="color: crimson;">', $error_code, ' ', $error_name, '</p>';
 			}
 		} else {
-			header('Content-Type: text/plain; charset=utf-8', true, $error_code);
+			Response::contentType('plain', $error_code);
 			echo "{$error_code} {$error_name}\n";
 		}
 		exit();
