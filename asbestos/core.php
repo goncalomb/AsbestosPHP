@@ -6,6 +6,10 @@ define('ASBESTOS_TIME', floor(ASBESTOS_MICROTIME));
 define('ASBESTOS_VERSION', '0.0.0');
 define('ASBESTOS_DIR', __DIR__);
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('html_errors', 0);
+
 $path = get_included_files()[0];
 do {
 	$path_last = $path;
@@ -35,6 +39,8 @@ spl_autoload_register(function($name) {
 		Asbestos\load_class($name, ASBESTOS_CLASSES_ALT_DIR);
 	}
 });
+
+Asbestos\ErrorHandling::register();
 
 if (is_file(ASBESTOS_CONFIG_FILE)) {
 	Asbestos\Config::load(ASBESTOS_CONFIG_FILE);

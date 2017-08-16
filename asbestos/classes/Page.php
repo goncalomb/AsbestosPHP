@@ -145,7 +145,7 @@ final class Page {
 	}
 
 	public static function end() {
-		if (!self::$_page) {
+		if (!self::$_page || ErrorHandling::lastError()) {
 			return;
 		}
 		self::$_zones[self::$_outputZone]->append(ob_get_clean());
