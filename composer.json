@@ -1,0 +1,17 @@
+{
+    "name": "goncalomb/asbestos",
+    "description": "A small framework for creating web applications in PHP.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gonçalo Baltazar",
+            "email": "hello@goncalomb.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Asbestos\\": "asbestos/classes/"
+        },
+        "files": ["asbestos/core.php"]
+    }
+}

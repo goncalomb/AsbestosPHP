@@ -10,17 +10,23 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('html_errors', 0);
 
-$path = get_included_files()[0];
-do {
-	$path_last = $path;
-	$path = dirname($path);
-	if ($path == $path_last) {
-		trigger_error('AsbestosPHP: unable to find root directory', E_USER_ERROR);
-		exit();
-	}
-} while (realpath($path . DIRECTORY_SEPARATOR . 'asbestos') != ASBESTOS_DIR);
-define('ASBESTOS_ROOT_DIR', $path);
-unset($path, $path_last);
+define('ASBESTOS_COMPOSER', class_exists('Composer\Autoload\ClassLoader'));
+
+if (ASBESTOS_COMPOSER) {
+	define('ASBESTOS_ROOT_DIR', dirname(dirname(dirname(dirname(ASBESTOS_DIR)))) . DIRECTORY_SEPARATOR . 'www');
+} else {
+	$path = get_included_files()[0];
+	do {
+		$path_last = $path;
+		$path = dirname($path);
+		if ($path == $path_last) {
+			trigger_error('AsbestosPHP: unable to find root directory', E_USER_ERROR);
+			exit();
+		}
+	} while (realpath($path . DIRECTORY_SEPARATOR . 'asbestos') != ASBESTOS_DIR);
+	define('ASBESTOS_ROOT_DIR', $path);
+	unset($path, $path_last);
+}
 
 define('ASBESTOS_CLASSES_DIR', ASBESTOS_DIR . DIRECTORY_SEPARATOR . 'classes');
 define('ASBESTOS_CONTENT_DIR', ASBESTOS_ROOT_DIR . DIRECTORY_SEPARATOR . 'content');

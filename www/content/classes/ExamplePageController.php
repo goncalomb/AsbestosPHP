@@ -6,12 +6,12 @@ use \Asbestos\Request;
 
 class ExamplePageController {
 
-	public function foo() {
+	public static function foo() {
 		Asbestos::startThemedPage('foo');
 		echo 'foo page';
 	}
 
-	public function bar($params) {
+	public static function bar($params) {
 		Asbestos::startThemedPage('bar');
 		echo '<pre style="text-align: left;">';
 		for ($i = 0; $i < 5; $i++) {
@@ -23,7 +23,7 @@ class ExamplePageController {
 		echo '</pre>';
 	}
 
-	public function debug() {
+	public static function debug() {
 		Asbestos::startThemedPage('debug');
 		echo '<pre style="text-align: left;">';
 		echo date('c'), "\n\n";
