@@ -26,8 +26,8 @@ final class AsbestosInstaller {
 
 	private static function recursiveCopy($path_s, $path_d) {
 		$handle = opendir($path_s);
+		$stat_dir = stat($path_s);
 		mkdir($path_d, 0777, true);
-		chmod($path_d, stat($path_s)['mode']);
 		while (($entry = readdir($handle)) !== FALSE) {
 			if ($entry != '.' && $entry != '..') {
 				$entry_path_s = $path_s . DIRECTORY_SEPARATOR . $entry;
@@ -42,6 +42,8 @@ final class AsbestosInstaller {
 				}
 			}
 		}
+		chmod($path_d, $stat_dir['mode']);
+		touch($path_d, $stat_dir['mtime'], $stat['atime']);
 		closedir($handle);
 	}
 
@@ -54,7 +56,7 @@ final class AsbestosInstaller {
 			}
 		}
 	}
-	
+
 	public static function copyAsbestosToWWW($event) {
 		$dir_www_asbestos = getcwd() . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . 'asbestos';
 		$dir_vendor_asbestos = dirname(__DIR__);
