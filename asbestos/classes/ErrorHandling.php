@@ -22,10 +22,10 @@ class ErrorHandling {
 	public static function register() {
 		error_reporting(~E_ALL);
 		set_error_handler(function($errno, $errstr, $errfile, $errline) {
-			if (error_reporting() == 0) {
-				return false;
+			if (error_reporting() != 0) {
+				static::handleError($errstr, $errno, $errfile, $errline);
 			}
-			static::handleError($errstr, $errno, $errfile, $errline);
+			return true;
 		});
 		set_exception_handler(function($ex) {
 			static::handleError($ex->getMessage(), $ex->getCode(), $ex->getFile(), $ex->getLine(), $ex);
