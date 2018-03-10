@@ -13,5 +13,6 @@
             "Asbestos\\": "asbestos/classes/"
         },
         "files": ["asbestos/core.php"]
-    }
+    },
+    "bin": ["bin/asbestos"]
 }

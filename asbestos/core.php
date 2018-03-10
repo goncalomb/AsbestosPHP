@@ -12,8 +12,21 @@ ini_set('html_errors', 0);
 
 define('ASBESTOS_COMPOSER', class_exists('Composer\Autoload\ClassLoader'));
 
+// TODO: improve/cleanup directory detection
 if (ASBESTOS_COMPOSER) {
-	define('ASBESTOS_ROOT_DIR', dirname(dirname(dirname(dirname(ASBESTOS_DIR)))) . DIRECTORY_SEPARATOR . 'www');
+	foreach ([
+		dirname(dirname(dirname(dirname(ASBESTOS_DIR)))) . DIRECTORY_SEPARATOR . 'www',
+		dirname(ASBESTOS_DIR) . DIRECTORY_SEPARATOR . 'www',
+	] as $dir) {
+		if (is_dir($dir)) {
+			define('ASBESTOS_ROOT_DIR', $dir);
+			break;
+		}
+	}
+	if (!defined('ASBESTOS_ROOT_DIR')) {
+		trigger_error('AsbestosPHP: unable to find root directory', E_USER_ERROR);
+		exit(1);
+	}
 } else {
 	$path = get_included_files()[0];
 	do {
@@ -21,7 +34,7 @@ if (ASBESTOS_COMPOSER) {
 		$path = dirname($path);
 		if ($path == $path_last) {
 			trigger_error('AsbestosPHP: unable to find root directory', E_USER_ERROR);
-			exit();
+			exit(1);
 		}
 	} while (realpath($path . DIRECTORY_SEPARATOR . 'asbestos') != ASBESTOS_DIR);
 	define('ASBESTOS_ROOT_DIR', $path);
@@ -45,6 +58,10 @@ spl_autoload_register(function($name) {
 		Asbestos\load_class($name, ASBESTOS_CLASSES_ALT_DIR);
 	}
 });
+
+if (php_sapi_name() == 'cli') {
+	return; // TODO: improve cli support (error handling, configs etc.)
+}
 
 Asbestos\ErrorHandling::register();
 

@@ -1,0 +1,158 @@
+#!/usr/bin/env php
+<?php
+
+use \Asbestos\Utils\ApacheConfig;
+
+foreach ([
+    __DIR__ . '/../../../autoload.php', // when run with asbestos as a dependency
+    __DIR__ . '/../vendor/autoload.php' // when run on the asbestos repository
+] as $autoload_file) {
+    $autoload_file = realpath($autoload_file);
+    if (is_file($autoload_file)) {
+        require $autoload_file;
+        break;
+    }
+}
+
+if (!defined('ASBESTOS_COMPOSER')) {
+    fwrite(STDERR, "Invalid composer environment.\n");
+    exit(1);
+}
+
+function parse_options($args, $options, &$error) {
+    $opts = array_fill_keys($options, false);
+    $error = null;
+    $name = null;
+    foreach ($args as $arg) {
+        if ($arg[0] == '-') {
+            if (strlen($arg) > 1) {
+                if ($arg[1] == '-') {
+                    if (strlen($arg) == 2) {
+                        break; // found --
+                    }
+                    $name = substr($arg, 2);
+                    if (isset($opts[$name])) {
+                        $opts[$name] = true;
+                        continue;
+                    }
+                    $error = "Invalid argument '{$name}'.";
+                    break;
+                }
+            }
+            $error = "Invalid argument '{$arg}'.";
+            break;
+        } else if ($name) {
+            $opts[$name] = $arg;
+            $name = null;
+        }
+    }
+    return $opts;
+}
+
+function composer_json() {
+    global $autoload_file;
+    $composer_file = dirname(dirname($autoload_file)) . '/composer.json';
+    if (is_file($composer_file)) {
+        return json_decode(file_get_contents($composer_file), true);
+    }
+    return null;
+}
+
+function show_usage() {
+    global $argv, $commands;
+    fwrite(STDERR, "Usage:\n");
+    fwrite(STDERR, "  {$argv[0]} <command> [options]\n\n");
+    fwrite(STDERR, "Available commands:\n");
+
+    $pad_size =max(array_map('strlen', array_keys($commands))) + 4;
+    foreach ($commands as $name => $cmd) {
+        fwrite(STDERR, str_pad("  {$name}", $pad_size));
+        fwrite(STDERR, str_replace("\n", "\n" . str_repeat(' ', $pad_size), $cmd['description']));
+        fwrite(STDERR, "\n");
+    }
+}
+
+$commands = [];
+
+$commands['install'] = [
+    'description' => <<<EOF
+Installs site on Apache2 server (/etc/apache2/sites-available).
+  --ip <ip>         ip
+  --port <port>     port (defaults to 9000)
+  --indexes         enable apache indexes
+  --allow-override  set 'AllowOverride All' to enable .htaccess files
+  --reload          reload apache
+EOF
+    ,
+    'options' => ['port', 'ip', 'indexes', 'allow-override', 'reload'],
+    'fn' => function ($opts) {
+        $composer = composer_json();
+        $name = '';
+        if ($composer && !empty($composer['name'])) {
+            $name = substr(strrchr($composer['name'], '/'), 1);
+        }
+        if (empty($name)) {
+            fwrite(STDERR, "Could not find site name on composer.json.\n");
+            return 1;
+        }
+
+        $apache_conf_dir = '/etc/apache2/sites-available';
+        $site_name = "100-{$name}.conf";
+        $conf_file = "{$apache_conf_dir}/{$site_name}";
+
+        if (!is_dir($apache_conf_dir)) {
+            fwrite(STDERR, "'{$apache_conf_dir}' is not found.\n");
+            return 1;
+        }
+
+        // TODO: sanitize options
+        $ip = (is_string($opts['ip']) ? $opts['ip'] : '');
+        $port = (is_string($opts['port']) ? (int) $opts['port'] : 9000);
+
+        $www_dir = ASBESTOS_ROOT_DIR;
+        $content_dir = ASBESTOS_CONTENT_DIR;
+
+        echo "Writing config '{$conf_file}'...\n";
+
+        $conf = new ApacheConfig();
+        $conf->addRootDirectory(ASBESTOS_ROOT_DIR, (bool) $opts['indexes'], (bool) $opts['allow-override']);
+        $conf->addDenyDirectory(ASBESTOS_CONTENT_DIR);
+        $conf->addVirtualHost($ip, $port, ASBESTOS_ROOT_DIR, $name);
+
+        if (file_put_contents($conf_file, $conf->get())) {
+            if ($opts['reload']) {
+                echo "Reloading apache2...\n";
+                passthru("a2ensite -q {$site_name}");
+                passthru("service apache2 reload");
+            } else {
+                echo "To activate the site you need to run:\n";
+                echo "  a2ensite {$site_name}\n";
+                echo "  service apache2 reload\n";
+            }
+        } else {
+            return 1;
+        }
+    }
+];
+
+if ($argc > 1) {
+    if (isset($commands[$argv[1]])) {
+        $opts = [];
+        if (isset($commands[$argv[1]]['options'])) {
+            $opts = parse_options(array_slice($argv, 1), $commands[$argv[1]]['options'], $error);
+            if ($error) {
+                fwrite(STDERR, "{$error}\n\n");
+                show_usage();
+                exit(1);
+            }
+        }
+        exit($commands[$argv[1]]['fn']($opts));
+    } else {
+        fwrite(STDERR, "Invalid command '{$argv[1]}'.\n\n");
+        show_usage();
+        exit(1);
+    }
+} else {
+    show_usage();
+    exit(1);
+}
