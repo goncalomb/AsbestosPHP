@@ -19,7 +19,8 @@ if (!defined('ASBESTOS_COMPOSER')) {
     exit(1);
 }
 
-function parse_options($args, $options, &$error) {
+function parse_options($args, $options, &$error)
+{
     $opts = array_fill_keys($options, false);
     $error = null;
     $name = null;
@@ -41,7 +42,7 @@ function parse_options($args, $options, &$error) {
             }
             $error = "Invalid argument '{$arg}'.";
             break;
-        } else if ($name) {
+        } elseif ($name) {
             $opts[$name] = $arg;
             $name = null;
         }
@@ -49,7 +50,8 @@ function parse_options($args, $options, &$error) {
     return $opts;
 }
 
-function composer_json() {
+function composer_json()
+{
     global $autoload_file;
     $composer_file = dirname(dirname($autoload_file)) . '/composer.json';
     if (is_file($composer_file)) {
@@ -58,7 +60,8 @@ function composer_json() {
     return null;
 }
 
-function show_usage() {
+function show_usage()
+{
     global $argv, $commands;
     fwrite(STDERR, "Usage:\n");
     fwrite(STDERR, "  {$argv[0]} <command> [options]\n\n");

@@ -2,11 +2,12 @@
 
 namespace Asbestos\Utils;
 
-final class ApacheConfig {
-
+final class ApacheConfig
+{
     private $_config = [];
 
-    public function addRootDirectory($dir, $indexes=false, $allow_override=false) {
+    public function addRootDirectory($dir, $indexes=false, $allow_override=false)
+    {
         $indexes = ($indexes ? '+' : '-');
         $allow_override = ($allow_override ? 'All' : 'None');
         $this->_config[] = <<<EOF
@@ -34,7 +35,8 @@ final class ApacheConfig {
 EOF;
     }
 
-    public function addDenyDirectory($dir) {
+    public function addDenyDirectory($dir)
+    {
         $this->_config[] = <<<EOF
 <Directory {$dir}>
     Require all denied
@@ -42,7 +44,8 @@ EOF;
 EOF;
     }
 
-    public function addVirtualHost($ip, $port, $www_dir, $log_name) {
+    public function addVirtualHost($ip, $port, $www_dir, $log_name)
+    {
         if ($ip) {
             $ip .= ':';
         }
@@ -57,10 +60,8 @@ Listen {$ip}{$port}
 EOF;
     }
 
-    public function get() {
+    public function get()
+    {
         return implode("\n\n", $this->_config) . "\n";
     }
-
 }
-
-?>
