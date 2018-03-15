@@ -10,9 +10,9 @@
     ],
     "autoload": {
         "psr-4": {
-            "Asbestos\\": "asbestos/classes/"
+            "Asbestos\\": "src/classes/"
         },
-        "files": ["asbestos/core.php"]
+        "files": ["src/core.php"]
     },
     "bin": ["bin/asbestos"]
 }
