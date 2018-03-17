@@ -17,7 +17,6 @@ final class Page
         self::$_zones['head'] = self::$_page->head();
         self::$_zones['body'] = self::$_page->body();
         ob_start();
-        register_shutdown_function(array(__CLASS__, 'end'));
         return self::$_page;
     }
 
@@ -132,7 +131,7 @@ final class Page
             if (isset($data['og']) && is_array($data['og'])) {
                 $og_tags = [
                     'title' => $simple_title,
-                    'url' => Request::url()
+                    'url' => Asbestos::request()->getUrl()
                 ];
                 if (!empty($data['description'])) {
                     $og_tags['description'] = $data['description'];

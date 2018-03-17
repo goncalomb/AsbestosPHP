@@ -27,12 +27,21 @@ class ExamplePageController {
 		Asbestos::startThemedPage('debug');
 		echo '<pre style="text-align: left;">';
 		echo date('c'), "\n\n";
+
 		echo '<strong>Config::get(null)</strong> = ';
 		var_dump(Config::get(null));
 		echo "\n";
-		echo '<strong>Request::url(true)</strong> = ';
-		var_dump(Request::url(true));
-		echo "\n";
+
+		$req = Asbestos::request();
+		echo '<strong>$req->isSecure()</strong> = ', $req->isSecure(), "\n";
+		echo '<strong>$req->getScheme()</strong> = ', $req->getScheme(), "\n";
+		echo '<strong>$req->getMethod()</strong> = ', $req->getMethod(), "\n";
+		echo '<strong>$req->getUri()</strong> = ', $req->getUri(), "\n";
+		echo '<strong>$req->getHost()</strong> = ', $req->getHost(), "\n";
+		echo '<strong>$req->getPath()</strong> = ', $req->getPath(), "\n";
+		echo '<strong>$req->getQuery()</strong> = ', $req->getQuery(), "\n";
+		echo '<strong>$req->getUrl()</strong> = ', $req->getUrl(), "\n";
+
 		echo '<strong>array_keys($GLOBALS)</strong> = ';
 		var_dump(array_keys($GLOBALS));
 		echo '</pre>';

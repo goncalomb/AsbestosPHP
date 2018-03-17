@@ -59,11 +59,14 @@ spl_autoload_register(function ($name) {
     }
 });
 
+Asbestos\Asbestos::start();
+
 if (php_sapi_name() == 'cli') {
     return; // TODO: improve cli support (error handling, configs etc.)
 }
 
-Asbestos\ErrorHandling::register();
+// TODO: improve and re-enable error handling
+// Asbestos\ErrorHandling::register();
 
 if (is_file(ASBESTOS_CONFIG_FILE)) {
     Asbestos\Config::load(ASBESTOS_CONFIG_FILE);
