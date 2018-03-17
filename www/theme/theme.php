@@ -13,11 +13,11 @@ h1 { font-family: \'Bitter\', serif; }
 ?>
 
 <header>
-	<h1>AsbestosPHP</h1>
+    <h1>AsbestosPHP</h1>
 </header>
 <?php Page::createZone('main', 'main'); ?>
 
 <footer>
-	<p><small>by <a href="https://goncalomb.com/">goncalomb</a></small></p>
+    <p><small>by <a href="https://goncalomb.com/">goncalomb</a></small></p>
 </footer>
 <?php Page::setOutputZone('main'); ?>
