@@ -20,4 +20,4 @@ h1 { font-family: \'Bitter\', serif; }
 <footer>
     <p><small>by <a href="https://goncalomb.com/">goncalomb</a></small></p>
 </footer>
-<?php Page::setOutputZone('main'); ?>
+<?php Page::startZone('main'); ?>
