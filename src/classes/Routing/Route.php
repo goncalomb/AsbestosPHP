@@ -2,6 +2,8 @@
 
 namespace Asbestos\Routing;
 
+use \Asbestos\View\View;
+
 class Route
 {
     private $_methods;
@@ -32,6 +34,13 @@ class Route
 
     public function invoke()
     {
-        call_user_func_array($this->_handler, func_get_args());
+        $ret = call_user_func_array($this->_handler, func_get_args());
+        if ($ret) {
+            if ($ret instanceof View) {
+                echo $ret->render();
+            } else {
+                echo $ret;
+            }
+        }
     }
 }

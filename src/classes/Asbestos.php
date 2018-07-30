@@ -24,6 +24,7 @@ final class Asbestos
         }
         self::$_request = Http\Request::fromGlobals();
         self::$_response = new Http\Response();
+        ob_start();
         register_shutdown_function(array(__CLASS__, 'end'));
     }
 
@@ -42,8 +43,9 @@ final class Asbestos
         if (PHP_SAPI == 'cli' || !self::$_response) {
             return;
         }
-        self::$_response->send();
         Page::end();
+        self::$_response->setContent(ob_get_clean());
+        self::$_response->send();
     }
 
     private static function loadTheme($title=null)
